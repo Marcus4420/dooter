@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {NavbarComponent} from "./navbar/navbar.component";
+import {collection, Firestore, getDocs} from "@angular/fire/firestore";
 
 @Component({
   selector: 'app-root',
@@ -12,4 +13,10 @@ import {NavbarComponent} from "./navbar/navbar.component";
 })
 export class AppComponent {
   title = 'Dooter';
+  firestore = inject(Firestore);
+  ngOnInit() {
+    getDocs(collection(this.firestore, 'testPath')).then((response) => {
+      console.log(response.docs)
+    })
+  }
 }

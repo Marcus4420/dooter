@@ -1,0 +1,9 @@
+{
+  "hosting": [
+    {
+      "target": "dooter",
+      "source": ".",
+      "frameworksBackend": {}
+    }
+  ]
+}
