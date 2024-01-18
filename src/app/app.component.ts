@@ -2,7 +2,7 @@ import {Component, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {NavbarComponent} from "./navbar/navbar.component";
-import {collection, Firestore, getDocs} from "@angular/fire/firestore";
+// import {collection, Firestore, getDocs, getFirestore, query} from "@angular/fire/firestore";
 
 @Component({
   selector: 'app-root',
@@ -13,10 +13,11 @@ import {collection, Firestore, getDocs} from "@angular/fire/firestore";
 })
 export class AppComponent {
   title = 'Dooter';
-  firestore = inject(Firestore);
-  ngOnInit() {
-    getDocs(collection(this.firestore, 'testPath')).then((response) => {
-      console.log(response.docs)
-    })
-  }
+  // async ngOnInit() {
+  //   const q = query(collection(this.firestore, "FirestoreTest"));
+  //   const querySnapshot = await getDocs(q);
+  //   querySnapshot.forEach((doc) => {
+  //     console.log(doc.id, " => ", doc.data());
+  //   })
+  // }
 }
