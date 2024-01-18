@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "dooter": {
+    "Dooter": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -48,13 +48,7 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.development.ts"
-                }
-              ]
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -63,10 +57,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "dooter:build:production"
+              "buildTarget": "Dooter:build:production"
             },
             "development": {
-              "buildTarget": "dooter:build:development"
+              "buildTarget": "Dooter:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +68,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "dooter:build"
+            "buildTarget": "Dooter:build"
           }
         },
         "test": {
@@ -94,23 +88,6 @@
             ],
             "scripts": []
           }
-        },
-        "deploy": {
-          "builder": "@angular/fire:deploy",
-          "options": {
-            "version": 2
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "dooter:build:production",
-              "serveTarget": "dooter:serve:production"
-            },
-            "development": {
-              "buildTarget": "dooter:build:development",
-              "serveTarget": "dooter:serve:development"
-            }
-          },
-          "defaultConfiguration": "production"
         }
       }
     }
