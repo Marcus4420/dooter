@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {NgIf} from "@angular/common";
+import { SupabaseAuthService } from '../supabase-auth.service'
+import {User} from "@supabase/supabase-js";
 
 @Component({
   selector: 'app-homepage',
@@ -11,9 +13,18 @@ import {NgIf} from "@angular/common";
   styleUrl: './homepage.component.css'
 })
 export class HomepageComponent {
-  public authStatus: Boolean = false;
-  public user: string = "John doe";
-  public changeAuth(): void {
-    this.authStatus = !this.authStatus;
+  authStatus = false;
+  supabaseAuth = inject(SupabaseAuthService);
+  currentUser: User | undefined = this.supabaseAuth.currentUser();
+
+  constructor() {
+    console.log("User signal:", this.currentUser);
+  }
+
+  signIn() {
+    this.supabaseAuth.signIn();
+  }
+  signOut() {
+    this.supabaseAuth.signOut();
   }
 }

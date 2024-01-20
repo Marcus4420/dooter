@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {NavbarComponent} from "./navbar/navbar.component";
-
+import { SupabaseAuthService } from './supabase-auth.service'
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -12,4 +12,5 @@ import {NavbarComponent} from "./navbar/navbar.component";
 })
 export class AppComponent {
   title = 'Dooter';
+  supabaseAuth = inject(SupabaseAuthService);
 }
