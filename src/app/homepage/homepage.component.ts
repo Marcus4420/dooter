@@ -13,16 +13,25 @@ import {User} from "@supabase/supabase-js";
   styleUrl: './homepage.component.css'
 })
 export class HomepageComponent {
+<<<<<<< Updated upstream
   authStatus = false;
   supabaseAuth = inject(SupabaseAuthService);
   currentUser: User | undefined = this.supabaseAuth.currentUser();
 
   constructor() {
     console.log("User signal:", this.currentUser);
+=======
+  session = this.supabaseAuth.session;
+
+  constructor(private supabaseAuth: SupabaseAuthService) {
+>>>>>>> Stashed changes
   }
 
-  signIn() {
-    this.supabaseAuth.signIn();
+  signUp() {
+    this.supabaseAuth.signUp('Marcusellested02@gmail.com', 'Test123');
+  }
+  Login() {
+    //
   }
   signOut() {
     this.supabaseAuth.signOut();

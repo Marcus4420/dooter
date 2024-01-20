@@ -1,5 +1,12 @@
 import {inject, Injectable, signal, WritableSignal} from '@angular/core';
-import {AuthSession, createClient, AuthChangeEvent, Session, SupabaseClient, User} from "@supabase/supabase-js";
+import {
+    AuthChangeEvent,
+    AuthSession,
+    createClient,
+    Session,
+    SupabaseClient,
+    User,
+} from '@supabase/supabase-js'
 import { environment } from "../environments/environment.development";
 
 
@@ -7,6 +14,7 @@ import { environment } from "../environments/environment.development";
   providedIn: 'root'
 })
 export class SupabaseAuthService {
+<<<<<<< Updated upstream
   private supabase: SupabaseClient
   private _currentUser: WritableSignal<User | undefined> = signal(undefined);
   constructor() {
@@ -27,25 +35,66 @@ export class SupabaseAuthService {
       }
     })
   }
+=======
+    private supabase: SupabaseClient
+    _session: AuthSession | null = null
 
+    constructor() {
+        this.supabase = createClient(environment.url, environment.key);
+    }
+>>>>>>> Stashed changes
 
-  async signIn() {
-    const { data, error } = await this.supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        queryParams: {
-          access_type: 'offline',
-          prompt: 'consent',
-        },
-      },
-    })
-  }
-  async signOut() {
-    const { error } = await this.supabase.auth.signOut()
-  }
+    get session() {
+        this.supabase.auth.getSession().then(({ data }) => {
+            this._session = data.session
+            console.log("Session req ", this._session);
+        })
+        console.log("Session req ", this._session);
+        return this._session
+    }
 
+    // profile(user: User) {
+    //     return this.supabase
+    //         .from('profiles')
+    //         .select(`username, website, avatar_url`)
+    //         .eq('id', user.id)
+    //         .single()
+    // }
+
+<<<<<<< Updated upstream
   get currentUser() {
     return this._currentUser.asReadonly();
   }
+=======
+    authChanges(callback: (event: AuthChangeEvent, session: Session | null) => void) {
+        return this.supabase.auth.onAuthStateChange(callback)
+    }
+
+    // async signIn() {
+    //     const { data, error } = await this.supabase.auth.signInWithOAuth({
+    //         provider: 'google',
+    //         options: {
+    //             queryParams: {
+    //                 access_type: 'offline',
+    //                 prompt: 'consent',
+    //             },
+    //         },
+    //     })
+    // }
+
+    async signUp(Email: string, Password: string) {
+        const { data, error } = await this.supabase.auth.signUp({
+            email: Email,
+            password: Password,
+            options: {
+                emailRedirectTo: 'localhost:4200'
+            }
+        })
+    }
+
+    signOut() {
+        return this.supabase.auth.signOut()
+    }
+>>>>>>> Stashed changes
 }
 

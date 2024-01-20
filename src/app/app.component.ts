@@ -12,5 +12,11 @@ import { SupabaseAuthService } from './supabase-auth.service'
 })
 export class AppComponent {
   title = 'Dooter';
-  supabaseAuth = inject(SupabaseAuthService);
+  session = this.supabase.session;
+
+  constructor(private readonly supabase: SupabaseAuthService) {}
+
+  ngOnInit() {
+    this.supabase.authChanges((_, session) => (this.session = session))
+  }
 }

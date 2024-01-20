@@ -6,12 +6,16 @@
     <p>This web-app was made with Angular, Tailwind, Socket.IO and Firebase.</p>
     <p>To see more, visit the <span class="underline italic">Github & Readme</span></p>
   </section>
+<<<<<<< Updated upstream
   <div *ngIf="!currentUser; else auth" class="mt-16">
+=======
+  <div *ngIf="!session" class="mt-16">
+>>>>>>> Stashed changes
     <p class="font-medium">To get started</p>
     <p>please sign  or login using the button below or use the testing credentials provided in the readme</p>
     <section class="flex flex-col items-center mt-4">
-      <button (click)="signIn()" class="mt-12 bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-full w-40">Sign up</button>
-<!--      <button (click)="getUser()" class="mt-12 bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-full w-40">Login</button>-->
+      <button (click)="Login()" class="mt-12 bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-full w-40">Login</button>
+      <button (click)="signUp()" class="mt-12 bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-full w-40">Sign up</button>
     </section>
   </div>
   <ng-template #auth>
