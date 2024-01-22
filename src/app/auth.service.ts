@@ -1,32 +1,33 @@
-import {effect, Injectable, signal, WritableSignal} from '@angular/core';
 import {
-  Auth,
-  signInWithPopup,
-  User,
-  GoogleAuthProvider,
-  signInWithRedirect,
-  browserSessionPersistence, getRedirectResult,
+    effect,
+    Injectable,
+    signal,
+    WritableSignal
+} from '@angular/core';
+import {
+    Auth,
+    signInWithPopup,
+    User,
+    GoogleAuthProvider,
+    signInWithRedirect,
+    browserLocalPersistence, getRedirectResult, signOut, getAuth,
 } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private _userSignal: WritableSignal<User|null> = signal(null);
-  // public userSignal = this._userSignal.asReadonly();
-  provider = new GoogleAuthProvider();
+  private _userSignal: WritableSignal<User|null> = signal(this.auth.currentUser);
+  private provider = new GoogleAuthProvider();
   constructor(private auth: Auth) {
-    // this.auth.setPersistence(browserSessionPersistence);
-    // if(auth) {
-    //   this._userSignal.set(auth.currentUser)
-    //   console.log(auth.currentUser, this.userSignal());
-    // }
+    // this._userSignal.set();
     effect(() => {
-      console.log(`The current user is: ${this._userSignal()}`);
+        console.log(`The current user is: ${this._userSignal()}`);
     });
   }
 
   async SignIn() {
+    this.auth.setPersistence(browserLocalPersistence);
     const result = await signInWithPopup(this.auth, this.provider);
 // The signed-in user info.
     const user = result.user;
@@ -37,6 +38,11 @@ export class AuthService {
     this._userSignal.set(user);
   }
 
+  async SignOut() {
+    this._userSignal.set(null);
+    await signOut(this.auth);
+    return
+  }
   get userSignal() {
     return this._userSignal.asReadonly();
   }

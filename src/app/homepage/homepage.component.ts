@@ -15,12 +15,13 @@ import {AuthService} from "../auth.service";
 })
 export class HomepageComponent {
   authService = inject(AuthService)
+  currentUser = this.authService.userSignal;
   constructor() {
   }
   SignIn() {
     this.authService.SignIn();
   }
   SignOut() {
-
+    this.authService.SignOut();
   }
 }
