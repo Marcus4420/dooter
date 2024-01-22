@@ -1,4 +1,11 @@
 export const environment = {
-        url: 'https://nfrwrznnheggxaqdrugs.supabase.co',
-        key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mcndyem5uaGVnZ3hhcWRydWdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1ODA4MTQsImV4cCI6MjAyMTE1NjgxNH0.vZqZBgNpUX8V9phvyK5f7A4ErOHdjQk_rgSVl6pY5aI',
+        firebaseConfig: {
+                apiKey: "AIzaSyDJB4DwPSvlUi-Y_qDMct-JwNwqZQO4XZY",
+                authDomain: "dooter-chat.firebaseapp.com",
+                databaseURL: "https://dooter-chat-default-rtdb.europe-west1.firebasedatabase.app",
+                projectId: "dooter-chat",
+                storageBucket: "dooter-chat.appspot.com",
+                messagingSenderId: "98283043880",
+                appId: "1:98283043880:web:e0bc565f977414aea7c91d"
+        },
 };
