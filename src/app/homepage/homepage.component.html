@@ -1,4 +1,4 @@
-<section class="flex items-center p-10 pt-8 flex-col text-center">
+<section class="flex items-center p-10 pt-28 flex-col text-center">
   <img class="h-32" src="assets/Dooter-logo.png">
   <section class="mt-6">
     <h1 class="font-bold">Welcome to Dooter!</h1>
@@ -17,6 +17,7 @@
     <div class="mt-16 justify-items-center">
 <!--      <img src='{{currentUser()?.photoURL}}'>-->
       <h1 class="font-bold underline">Hello {{currentUser()?.displayName}}</h1>
+      <a routerLink="/chatpage"><button class="mt-12 bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-full w-40">Chat</button></a>
       <button (click)="SignOut()" class="mt-12 bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-full w-40">Logout</button>
     </div>
   </ng-template>

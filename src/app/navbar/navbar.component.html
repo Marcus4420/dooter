@@ -1,5 +1,10 @@
-<nav class="flex bg-blue-800 text-white justify-around p-2 text-xl border-b-4 border-stone-800 sm:text-base">
-  <a routerLink="/">Home</a>
-  <a routerLink="/chatpage">Chat</a>
-<!--  <a>Login</a>-->
+<nav class="flex bg-blue-800 text-white justify-center items-center p-2 px-6 text-xl border-b-4 border-stone-800 sm:text-base" *ngIf="!currentUser(); else auth">
+  <p>I dont know what to put here yet</p>
 </nav>
+<ng-template #auth>
+  <nav class="flex bg-blue-800 text-white justify-around p-2 text-xl border-b-4 border-stone-800 sm:text-base">
+    <a routerLink="/">Home</a>
+    <a routerLink="/chatpage">Chat</a>
+    <!--  <a>Login</a>-->
+  </nav>
+</ng-template>
