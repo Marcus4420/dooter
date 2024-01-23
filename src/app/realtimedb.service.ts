@@ -40,7 +40,7 @@ export class RealtimedbService {
     return
   }
 
-  get messages() {
+  get userMessages() {
     return this._userMessagesSignal.asReadonly();
   }
 }

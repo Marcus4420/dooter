@@ -12,18 +12,18 @@ import {NgForOf} from "@angular/common";
   styleUrl: './chatpage.component.css'
 })
 export class ChatpageComponent {
-  RTdb =  inject(RealtimedbService);
+  realtimeDB =  inject(RealtimedbService);
   authService = inject(AuthService);
   currentUser = this.authService.userSignal();
-  allMessagesSignal = this.RTdb.messages;
-  message = '';
+  allMessagesSignal = this.realtimeDB.userMessages;
+  inputMessage = '';
   constructor() {
 
   }
 
-  rtdbtest() {
+  sendMessage() {
     if (this.currentUser) {
-      this.RTdb.writeUserData(this.currentUser?.uid, this.currentUser?.displayName,this.currentUser?.email, this.currentUser?.photoURL, this.message);
+      this.realtimeDB.writeUserData(this.currentUser?.uid, this.currentUser?.displayName,this.currentUser?.email, this.currentUser?.photoURL, this.inputMessage);
     } else {
       console.log("A current user has not been authenticated. Current user: " + this.currentUser);
     }

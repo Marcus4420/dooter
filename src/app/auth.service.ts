@@ -5,12 +5,13 @@ import {
     WritableSignal
 } from '@angular/core';
 import {
-    Auth,
-    signInWithPopup,
-    User,
-    GoogleAuthProvider,
-    signInWithRedirect,
-    browserLocalPersistence, getRedirectResult, signOut, getAuth,
+  Auth,
+  signInWithPopup,
+  User,
+  GoogleAuthProvider,
+  browserLocalPersistence,
+  signOut,
+  authState, user
 } from '@angular/fire/auth';
 
 @Injectable({
@@ -20,14 +21,18 @@ export class AuthService {
   private _userSignal: WritableSignal<User|null> = signal(this.auth.currentUser);
   private provider = new GoogleAuthProvider();
   constructor(private auth: Auth) {
-    // this._userSignal.set();
+    this.auth.onAuthStateChanged((user) => {
+      this._userSignal.set(user);
+    })
+
+
     effect(() => {
         console.log(`The current user is: ${this._userSignal()}`);
     });
   }
 
   async SignIn() {
-    this.auth.setPersistence(browserLocalPersistence);
+    // this.auth.setPersistence(browserLocalPersistence);
     const result = await signInWithPopup(this.auth, this.provider);
 // The signed-in user info.
     const user = result.user;
