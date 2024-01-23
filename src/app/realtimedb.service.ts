@@ -26,6 +26,7 @@ export class RealtimedbService {
     // TODO: Fix this hell of string | undefined | null thingy
     writeUserMessage(name: string | null | undefined, email: string | null | undefined, imageUrl: string | null | undefined, message: string) {
       set(this._userMessageRef, {
+        userid: this.userIdSignal(),
         username: name,
         email: email,
         profile_picture : imageUrl,

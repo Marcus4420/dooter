@@ -14,12 +14,7 @@ import { onAuthStateChanged, Auth} from "@angular/fire/auth";
 })
 export class AppComponent {
   title = 'Dooter';
-  authservice = inject(AuthService);
-  userSignalAdmin = this.authservice.userAuthAdmin;
 
-  constructor(private auth: Auth) {
-    auth.onAuthStateChanged((user) => {
-      this.userSignalAdmin.set(user);
-    })
+  constructor() {
   }
 }
