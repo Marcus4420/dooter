@@ -1,4 +1,4 @@
-import {effect, inject, Injectable, signal, WritableSignal} from '@angular/core';
+import {computed, effect, inject, Injectable, signal, WritableSignal} from '@angular/core';
 import { getDatabase, ref, set} from "firebase/database";
 import {User} from "@angular/fire/auth";
 import {onValue} from "@angular/fire/database";
@@ -10,10 +10,10 @@ import {getMessaging} from "@angular/fire/messaging";
 })
 export class RealtimedbService {
   private AuthService = inject(AuthService);
-  private userId = this.AuthService.userSignal()?.uid
-  private _userMessagesSignal: WritableSignal<[]> = signal([])
+  private userIdSignal = computed(() => this.AuthService.userSignal()?.uid);
+  private _userMessagesSignal: WritableSignal<Object|null> = signal(null);
   private db = getDatabase();
-  private _userMessageRef = ref(this.db, 'user/' + this.userId + '/message/');
+  private _userMessageRef = ref(this.db, 'user/' + this.userIdSignal() + '/message/');
   constructor() {
     this.messagesByUser();
     effect(() => {
@@ -21,10 +21,11 @@ export class RealtimedbService {
     })
   }
 
-  //Replace /users with a websocket room id or something
-    writeUserData(userId: string, name: string | null, email: string | null, imageUrl: string | null, message: string) {
-    const index = Math.floor((Math.random() * 10000) + 1);
-      set(ref(this.db, 'user/' + this.userId + '/message/' + index), {
+    //TODO: Replace /users with a websocket room id or something
+
+    // TODO: Fix this hell of string | undefined | null thingy
+    writeUserMessage(name: string | null | undefined, email: string | null | undefined, imageUrl: string | null | undefined, message: string) {
+      set(this._userMessageRef, {
         username: name,
         email: email,
         profile_picture : imageUrl,

@@ -1,4 +1,4 @@
-import {Component, computed, inject} from '@angular/core';
+import {Component, computed, effect, inject} from '@angular/core';
 import {RealtimedbService} from "../realtimedb.service";
 import {AuthService} from "../auth.service";
 import { FormsModule } from "@angular/forms";
@@ -14,16 +14,19 @@ import {NgForOf} from "@angular/common";
 export class ChatpageComponent {
   realtimeDB =  inject(RealtimedbService);
   authService = inject(AuthService);
-  currentUser = this.authService.userSignal();
-  allMessagesSignal = this.realtimeDB.userMessages;
+  currentUser = computed(() => this.authService.userSignal());
+  allMessagesSignal = computed(() => this.realtimeDB.userMessages());
   inputMessage = '';
   constructor() {
+    effect(() => {
+        console.log("all messages in chatpage", this.allMessagesSignal())
+    })
 
   }
 
   sendMessage() {
-    if (this.currentUser) {
-      this.realtimeDB.writeUserData(this.currentUser?.uid, this.currentUser?.displayName,this.currentUser?.email, this.currentUser?.photoURL, this.inputMessage);
+    if (this.currentUser()) {
+      this.realtimeDB.writeUserMessage(this.currentUser()?.displayName,this.currentUser()?.email, this.currentUser()?.photoURL, this.inputMessage);
     } else {
       console.log("A current user has not been authenticated. Current user: " + this.currentUser);
     }

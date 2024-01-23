@@ -9,9 +9,7 @@ import {
   signInWithPopup,
   User,
   GoogleAuthProvider,
-  browserLocalPersistence,
   signOut,
-  authState, user
 } from '@angular/fire/auth';
 
 @Injectable({
@@ -19,12 +17,10 @@ import {
 })
 export class AuthService {
   private _userSignal: WritableSignal<User|null> = signal(this.auth.currentUser);
+  private authObserver = this.auth.onAuthStateChanged((user) => this._userSignal.set(user));
   private provider = new GoogleAuthProvider();
-  constructor(private auth: Auth) {
-    this.auth.onAuthStateChanged((user) => {
-      this._userSignal.set(user);
-    })
 
+  constructor(private auth: Auth) {
 
     effect(() => {
         console.log(`The current user is: ${this._userSignal()}`);
@@ -50,5 +46,9 @@ export class AuthService {
   }
   get userSignal() {
     return this._userSignal.asReadonly();
+  }
+
+  get userAuthAdmin() {
+    return this._userSignal;
   }
 }

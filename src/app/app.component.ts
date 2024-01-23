@@ -2,6 +2,9 @@ import {Component, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {NavbarComponent} from "./navbar/navbar.component";
+import {AuthService} from "./auth.service";
+import { onAuthStateChanged, Auth} from "@angular/fire/auth";
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -11,7 +14,12 @@ import {NavbarComponent} from "./navbar/navbar.component";
 })
 export class AppComponent {
   title = 'Dooter';
+  authservice = inject(AuthService);
+  userSignalAdmin = this.authservice.userAuthAdmin;
 
-  constructor() {
+  constructor(private auth: Auth) {
+    auth.onAuthStateChanged((user) => {
+      this.userSignalAdmin.set(user);
+    })
   }
 }
