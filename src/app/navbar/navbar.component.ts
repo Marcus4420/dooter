@@ -14,6 +14,6 @@ import {AuthService} from "../auth.service";
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-    authService = inject(AuthService)
-    currentUser = this.authService.userSignal;
+  private auth = inject(AuthService);
+  public currentUserFromSession = this.auth.currentUserFromSession;
 }

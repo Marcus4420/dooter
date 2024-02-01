@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "dooter": {
+    "dooterv2": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/dooter",
+            "outputPath": "dist/dooterv2",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -63,10 +63,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "dooter:build:production"
+              "buildTarget": "dooterv2:build:production"
             },
             "development": {
-              "buildTarget": "dooter:build:development"
+              "buildTarget": "dooterv2:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +74,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "dooter:build"
+            "buildTarget": "dooterv2:build"
           }
         },
         "test": {
@@ -94,23 +94,6 @@
             ],
             "scripts": []
           }
-        },
-        "deploy": {
-          "builder": "@angular/fire:deploy",
-          "options": {
-            "version": 2
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "dooter:build:production",
-              "serveTarget": "dooter:serve:production"
-            },
-            "development": {
-              "buildTarget": "dooter:build:development",
-              "serveTarget": "dooter:serve:development"
-            }
-          },
-          "defaultConfiguration": "production"
         }
       }
     }

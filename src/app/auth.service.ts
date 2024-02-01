@@ -1,54 +1,70 @@
-import {
-    effect,
-    Injectable,
-    signal,
-    WritableSignal
-} from '@angular/core';
-import {
-  Auth,
-  signInWithPopup,
-  User,
-  GoogleAuthProvider,
-  signOut,
-} from '@angular/fire/auth';
+import {effect, Injectable, signal, WritableSignal} from '@angular/core';
+import {createClient, SupabaseClient, User} from "@supabase/supabase-js";
+import {environment} from "../environments/environment.development";
+
+export interface Profile {
+    full_name: string
+    email: string
+    avatar_url: string
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private _userSignal: WritableSignal<User|null> = signal(this.auth.currentUser);
-  private authObserver = this.auth.onAuthStateChanged((user) => this._userSignal.set(user));
-  private provider = new GoogleAuthProvider();
+  private supabase: SupabaseClient
+  private _currentUserFromSession: WritableSignal<User|null> = signal(null);
+  private _currentProfile: WritableSignal<Profile | null> = signal(null);
 
-  constructor(private auth: Auth) {
+  constructor() {
+    this.supabase = createClient(environment.supabaseURL, environment.supabaseKEY);
+    this.supabase.auth.onAuthStateChange((event,session) => {
+      console.log('auth changed: ', event);
+      console.longg('auth changed session: ', session)
+      if(session) {
+        this._currentUserFromSession.set(session.user);
+      } else {
+        this._currentUserFromSession.set(null);
+      }
+
+    })
 
     effect(() => {
-        console.log(`The current user is: ${this._userSignal()}`);
-    });
+        this.userProfile(this._currentUserFromSession()).then((profile) => {
+          this._currentProfile.set(profile.data);
+        })
+    })
   }
 
-  async SignIn() {
-    // this.auth.setPersistence(browserLocalPersistence);
-    const result = await signInWithPopup(this.auth, this.provider);
-// The signed-in user info.
-    const user = result.user;
-// This gives you a Google Access Token.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential?.accessToken;
-    console.log(user)
-    this._userSignal.set(user);
+  async signIn() {
+    const { data, error } = await this.supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    })
   }
 
-  async SignOut() {
-    this._userSignal.set(null);
-    await signOut(this.auth);
-    return
+  async signOut() {
+    const { error } = await this.supabase.auth.signOut()
   }
-  get userSignal() {
-    return this._userSignal.asReadonly();
+    userProfile(user: User | null) {
+      return this.supabase.from('profiles')
+          .select('full_name, avatar_url, email')
+          .eq('id', user?.id)
+          .single()
+    }
+
+
+  get currentUserFromSession() {
+    return this._currentUserFromSession.asReadonly();
   }
 
-  get userAuthAdmin() {
-    return this._userSignal;
+  get currentProfile() {
+    return this._currentProfile;
   }
+
 }

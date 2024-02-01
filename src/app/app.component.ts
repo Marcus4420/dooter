@@ -1,9 +1,8 @@
-import {Component, inject} from '@angular/core';
+import {Component, effect, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import {NavbarComponent} from "./navbar/navbar.component";
 import {AuthService} from "./auth.service";
-import { onAuthStateChanged, Auth} from "@angular/fire/auth";
+import {NavbarComponent} from "./navbar/navbar.component";
 
 @Component({
   selector: 'app-root',
@@ -13,8 +12,8 @@ import { onAuthStateChanged, Auth} from "@angular/fire/auth";
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'Dooter';
+  title = 'authSandbox';
+  // authService = inject(AuthService);
+  // currentUser = this.authService.currentUser;
 
-  constructor() {
-  }
 }
