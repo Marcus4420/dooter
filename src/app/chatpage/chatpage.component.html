@@ -1,3 +1,7 @@
+<div *ngFor="let message of currentLoadedMessages()">
+  <p class="font-bold">{{message.message}}</p>
+</div>
+
   <div class="absolute bottom-10 w-screen">
     <form class="flex justify-center p-5" [formGroup]="messageForm" (ngSubmit)="onSubmit()">
       <input class="mx-5 rounded-md border-black border-2" formControlName="message" type="text">

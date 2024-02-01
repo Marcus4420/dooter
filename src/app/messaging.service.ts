@@ -1,5 +1,14 @@
-import {computed, effect, inject, Injectable} from '@angular/core';
+import {computed, effect, inject, Injectable, signal, WritableSignal} from '@angular/core';
 import {AuthService} from "./auth.service";
+import {data} from "autoprefixer";
+
+export interface Message {
+  id: string
+  sender_id: string
+  receiver_id: string
+  message: string
+  sent_at: Date
+}
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +17,14 @@ export class MessagingService {
   private _authService = inject(AuthService)
   private _supabaseClient = this._authService.supabaseClient;
   private _currentProfileID = computed(() => this._authService.currentProfile()?.id);
+  private _loadedMessages: WritableSignal<Message[] | null> = signal(null)
   constructor() {
     effect(() => {
       this.subscribeToMessagesReceivedToSpecificUser();
+      this.loadMessagesBetweenUsers(this._currentProfileID());
+    })
+    effect(() => {
+      console.log("Messages: ", this._loadedMessages());
     })
 
   }
@@ -41,6 +55,7 @@ export class MessagingService {
                 //TODO FETCH LAST 30 MESSAGES WITH THIS COMBINED KEY
                 //TODO ADD CACHING OR SOMETHING SO WE DONT HAVE TO FETCH ALL THE TIME!
                 const { receiver_id, sender_id } = payload.new
+                this.loadMessagesBetweenUsers(receiver_id);
                 console.log(receiver_id, sender_id);
                 console.log('Change received!', payload)
               }
@@ -50,4 +65,17 @@ export class MessagingService {
 
   }
 
+  async loadMessagesBetweenUsers(receiver: string | undefined) {
+    const { data: messages, error } = await this._supabaseClient
+        .from('messages')
+        .select('*').eq('receiver_id', receiver)
+        .range(0, 9)
+    console.log(messages)
+    this._loadedMessages.set(messages);
+  }
+
+
+  get currentLoadedMessages() {
+    return this._loadedMessages.asReadonly();
+  }
 }
