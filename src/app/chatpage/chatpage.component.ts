@@ -22,13 +22,15 @@ export class ChatpageComponent {
   private formbuilder = inject(FormBuilder);
   public currentLoadedMessages = this.messageService.currentLoadedMessages;
   messageForm = this.formbuilder.group({
-    message: ''
+    message: '',
   });
 
 
+  //TODO add user experience when no message is input
   onSubmit() {
     if (this.messageForm.value.message) {
-      this.messageService.sendMessageToDB(this.messageForm.value.message);
+      console.log("onSubmit",this.messageForm.value.message,'2bf9356c-f685-4dca-bfb1-9966752d0149');
+      this.messageService.sendMessageToDB(this.messageForm.value.message, '2bf9356c-f685-4dca-bfb1-9966752d0149');
       this.messageForm.reset();
       return
     }

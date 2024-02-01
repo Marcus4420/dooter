@@ -4,6 +4,7 @@ import {data} from "autoprefixer";
 
 export interface Message {
   id: string
+  conversation_id: string
   sender_id: string
   receiver_id: string
   message: string
@@ -21,8 +22,9 @@ export class MessagingService {
   constructor() {
     effect(() => {
       if (this._currentProfileID()) {
+        console.warn("SUBSCRIBED", this._currentProfileID())
         this.subscribeToMessagesReceivedToSpecificUser();
-        this.loadMessagesBetweenUsers(this._currentProfileID());
+        this.loadMessagesBetweenUsers();
       }
 
     })
@@ -32,11 +34,11 @@ export class MessagingService {
 
   }
 
-  async sendMessageToDB(message: string) {
+  async sendMessageToDB(message: string, receiverID: string) {
     const { data, error } = await this._supabaseClient
         .from('messages')
         .insert([
-          { sender_id: this._currentProfileID(), receiver_id: '2bf9356c-f685-4dca-bfb1-9966752d0149', message: message, sent_at: new Date() },
+          { conversation_id: '50e6445d-18c1-4901-92de-4aef819c9179',sender_id: this._currentProfileID(), receiver_id: receiverID, message: message, sent_at: new Date() },
         ])
         .select()
     if (data) {
@@ -47,36 +49,41 @@ export class MessagingService {
   }
 
   subscribeToMessagesReceivedToSpecificUser() {
-    const userID = this._currentProfileID();
-    if (userID) {
-      console.log("userID from sub ", userID)
+    const currid = this._currentProfileID()
       const channels = this._supabaseClient.channel('messages-db-changes')
           .on(
               'postgres_changes',
-              { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${userID}`},
+              { event: 'INSERT', schema: 'public', table: 'messages', filter: `sender_id=eq.${currid}`},
               (payload) => {
                 //TODO FETCH LAST 30 MESSAGES WITH THIS COMBINED KEY
                 //TODO ADD CACHING OR SOMETHING SO WE DONT HAVE TO FETCH ALL THE TIME!
                 const { receiver_id, sender_id } = payload.new
-                this.loadMessagesBetweenUsers(receiver_id);
+                this.loadMessagesBetweenUsers();
                 console.log(receiver_id, sender_id);
                 console.log('Change received!', payload)
               }
           )
           .subscribe()
-    }
-
   }
 
-  async loadMessagesBetweenUsers(receiver: string | undefined) {
+  async loadMessagesBetweenUsers() {
+    console.log("hit")
     const { data: messages, error } = await this._supabaseClient
         .from('messages')
-        .select('*').eq('receiver_id', receiver)
+        .select('*').eq('conversation_id', '50e6445d-18c1-4901-92de-4aef819c9179')
         .order('sent_at', { ascending: false })
         .range(0,9)
     this._loadedMessages.set(messages);
   }
 
+  //TODO user sender and receiver from here
+  async loadConversationBetweenUsers() {
+    const { data: conversation, error } = await this._supabaseClient
+        .from('conversation')
+        .select('*').eq('id','50e6445d-18c1-4901-92de-4aef819c9179')
+        .single();
+    return '50e6445d-18c1-4901-92de-4aef819c9179';
+  }
 
   get currentLoadedMessages() {
     return this._loadedMessages.asReadonly();
