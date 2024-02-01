@@ -40,6 +40,7 @@ To get a local copy up and running, follow these steps:
 - Setup RLS on messages
 - Normalize DB
 - Update schemas
+- Change from Serial to UUID in database
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.

@@ -1,26 +1,32 @@
 import {Component, inject, signal, WritableSignal} from '@angular/core';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MessagingService} from "../messaging.service";
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-chatpage',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './chatpage.component.html',
   styleUrl: './chatpage.component.css'
 })
 export class ChatpageComponent {
-  public messageInput: WritableSignal<string> = signal('');
   private messageService = inject(MessagingService)
+  private formbuilder = inject(FormBuilder);
 
+  messageForm = this.formbuilder.group({
+    message: ''
+  });
 
   onSubmit() {
-    this.sendMessageToDB();
+    if (this.messageForm.value.message) {
+      this.messageService.sendMessageToDB(this.messageForm.value.message);
+      return
+    }
   }
 
-    public sendMessageToDB() {
-      this.messageService.sendMessageToDB()
-    }
+
 }

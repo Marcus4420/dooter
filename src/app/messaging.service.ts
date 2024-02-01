@@ -13,11 +13,11 @@ export class MessagingService {
     effect(() => {console.log("current user id ", this._currentProfileID())})
   }
 
-  async sendMessageToDB() {
+  async sendMessageToDB(message: string) {
     const { data, error } = await this._supabaseClient
         .from('messages')
         .insert([
-          { sender_id: this._currentProfileID(), receiver_id: this._currentProfileID(), message: 'Testing', sent_at: new Date() },
+          { sender_id: this._currentProfileID(), receiver_id: this._currentProfileID(), message: message, sent_at: new Date() },
         ])
         .select()
     console.log("Data from send msg ", data);
