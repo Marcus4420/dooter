@@ -3,6 +3,7 @@ import {createClient, SupabaseClient, User} from "@supabase/supabase-js";
 import {environment} from "../environments/environment.development";
 
 export interface Profile {
+    id: string
     full_name: string
     email: string
     avatar_url: string
@@ -12,13 +13,14 @@ export interface Profile {
   providedIn: 'root'
 })
 export class AuthService {
-  private supabase: SupabaseClient
+  //TODO extract supabase to a supabase service
+  private _supabase: SupabaseClient
   private _currentUserFromSession: WritableSignal<User|null> = signal(null);
   private _currentProfile: WritableSignal<Profile | null> = signal(null);
 
   constructor() {
-    this.supabase = createClient(environment.supabaseURL, environment.supabaseKEY);
-    this.supabase.auth.onAuthStateChange((event,session) => {
+    this._supabase = createClient(environment.supabaseURL, environment.supabaseKEY);
+    this._supabase.auth.onAuthStateChange((event,session) => {
       console.log('auth changed: ', event);
       console.log('auth changed session: ', session)
       if(session) {
@@ -37,7 +39,7 @@ export class AuthService {
   }
 
   async signIn() {
-    const { data, error } = await this.supabase.auth.signInWithOAuth({
+    const { data, error } = await this._supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         queryParams: {
@@ -49,11 +51,11 @@ export class AuthService {
   }
 
   async signOut() {
-    const { error } = await this.supabase.auth.signOut()
+    const { error } = await this._supabase.auth.signOut()
   }
     userProfile(user: User | null) {
-      return this.supabase.from('profiles')
-          .select('full_name, avatar_url, email')
+      return this._supabase.from('profiles')
+          .select('id, full_name, avatar_url, email')
           .eq('id', user?.id)
           .single()
     }
@@ -67,4 +69,7 @@ export class AuthService {
     return this._currentProfile;
   }
 
+  get supabaseClient() {
+    return this._supabase;
+  }
 }

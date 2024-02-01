@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RealtimedbService } from './realtimedb.service';
+import { MessagingService } from './messaging.service';
 
-describe('RealtimedbService', () => {
-  let service: RealtimedbService;
+describe('MessagingService', () => {
+  let service: MessagingService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(RealtimedbService);
+    service = TestBed.inject(MessagingService);
   });
 
   it('should be created', () => {
