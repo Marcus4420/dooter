@@ -20,7 +20,7 @@ export class AuthService {
     this.supabase = createClient(environment.supabaseURL, environment.supabaseKEY);
     this.supabase.auth.onAuthStateChange((event,session) => {
       console.log('auth changed: ', event);
-      console.longg('auth changed session: ', session)
+      console.log('auth changed session: ', session)
       if(session) {
         this._currentUserFromSession.set(session.user);
       } else {

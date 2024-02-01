@@ -1,27 +1,61 @@
-# Dooterv2
+# Dooter - A Chat App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.5.
+![Dooter Logo](/src/assets/Dooter-logo.png)
 
-## Development server
+Dooter is a modern, fast, and secure chat application built with Supabase, Angular, and Tailwind CSS. It provides a seamless chatting experience with real-time updates, user authentication, and a beautiful UI.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Features
 
-## Code scaffolding
+- Real-time chat updates (WIP)
+- User authentication
+- Responsive and modern UI
+- Secure and fast
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Built With
 
-## Build
+- [Supabase](https://supabase.io/) - Open source Firebase alternative
+- [Angular](https://angular.io/) - Web application framework
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Getting Started
 
-## Running unit tests
+To get a local copy up and running, follow these steps:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Prerequisites
 
-## Running end-to-end tests
+- Node.js
+- Angular CLI
+- Google Account
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## TODO
+### Frontend
+- Create chat page
+- Create Profile page
+- More content on home page
+### Logic
+- Get realtime connection to supabase
+- Allow for messages to be sent
+- Allow for users to select a reciever of messages
+### Database
+- Setup RLS on messages
+- Normalize DB
+- Update schemas
+## Contributing
 
-## Further help
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## Contact
+
+Marcus Ellested - Marcusellested02@mail.com
+
+Project Link: [https://github.com/Marcus4420/Dooter](https://github.com/Marcus4420/Dooter)
