@@ -24,8 +24,10 @@ export class ChatpageComponent {
   onSubmit() {
     if (this.messageForm.value.message) {
       this.messageService.sendMessageToDB(this.messageForm.value.message);
+      this.messageForm.reset();
       return
     }
+
   }
 
 

@@ -20,8 +20,11 @@ export class MessagingService {
           { sender_id: this._currentProfileID(), receiver_id: this._currentProfileID(), message: message, sent_at: new Date() },
         ])
         .select()
-    console.log("Data from send msg ", data);
-    console.log("Error from send msg ", error);
+    if (data) {
+      console.log("Data from send msg ", data);
+    } else if (error) {
+      console.log("Error from send msg ", error);
+    }
   }
 
 }
