@@ -38,6 +38,10 @@ export class MessagingService {
               'postgres_changes',
               { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${userID}`},
               (payload) => {
+                //TODO FETCH LAST 30 MESSAGES WITH THIS COMBINED KEY
+                //TODO ADD CACHING OR SOMETHING SO WE DONT HAVE TO FETCH ALL THE TIME!
+                const { receiver_id, sender_id } = payload.new
+                console.log(receiver_id, sender_id);
                 console.log('Change received!', payload)
               }
           )
