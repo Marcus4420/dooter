@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer components {
+  .message-sent {
+    @apply bg-amber-400
+  }
+  .message-received {
+    @apply bg-green-800
+  }
+}
+
 body {
   background-color: rgb(96 165 250);
 }

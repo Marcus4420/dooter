@@ -1,5 +1,5 @@
 <div *ngFor="let message of currentLoadedMessages()">
-  <p class="font-bold">{{message.message}}</p>
+  <p [className]="styleBySender(message)" class="font-bold">{{message.message}}</p>
 </div>
 
   <div class="absolute bottom-10 w-screen">

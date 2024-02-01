@@ -20,8 +20,11 @@ export class MessagingService {
   private _loadedMessages: WritableSignal<Message[] | null> = signal(null)
   constructor() {
     effect(() => {
-      this.subscribeToMessagesReceivedToSpecificUser();
-      this.loadMessagesBetweenUsers(this._currentProfileID());
+      if (this._currentProfileID()) {
+        this.subscribeToMessagesReceivedToSpecificUser();
+        this.loadMessagesBetweenUsers(this._currentProfileID());
+      }
+
     })
     effect(() => {
       console.log("Messages: ", this._loadedMessages());
@@ -69,8 +72,8 @@ export class MessagingService {
     const { data: messages, error } = await this._supabaseClient
         .from('messages')
         .select('*').eq('receiver_id', receiver)
-        .range(0, 9)
-    console.log(messages)
+        .order('sent_at', { ascending: false })
+        .range(0,9)
     this._loadedMessages.set(messages);
   }
 
