@@ -7,10 +7,12 @@ import {AuthService} from "./auth.service";
 export class MessagingService {
   private _authService = inject(AuthService)
   private _supabaseClient = this._authService.supabaseClient;
-  private _currentProfileInfo = this._authService.currentProfile;
   private _currentProfileID = computed(() => this._authService.currentProfile()?.id);
   constructor() {
-    effect(() => {console.log("current user id ", this._currentProfileID())})
+    effect(() => {
+      this.subscribeToMessagesReceivedToSpecificUser();
+    })
+
   }
 
   async sendMessageToDB(message: string) {
@@ -25,6 +27,23 @@ export class MessagingService {
     } else if (error) {
       console.log("Error from send msg ", error);
     }
+  }
+
+  subscribeToMessagesReceivedToSpecificUser() {
+    const userID = this._currentProfileID();
+    if (userID) {
+      console.log("userID from sub ", userID)
+      const channels = this._supabaseClient.channel('messages-db-changes')
+          .on(
+              'postgres_changes',
+              { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${userID}`},
+              (payload) => {
+                console.log('Change received!', payload)
+              }
+          )
+          .subscribe()
+    }
+
   }
 
 }

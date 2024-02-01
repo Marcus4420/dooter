@@ -27,7 +27,6 @@ export class ChatpageComponent {
       this.messageForm.reset();
       return
     }
-
   }
 
 
