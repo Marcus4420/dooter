@@ -34,6 +34,7 @@ export class ChatpageComponent {
     }
   }
 
+  //TODO style based on screen size
   styleBySender(message: Message) {
     if (message.sender_id === this.authService.currentProfile()?.id) {
       return 'message-sent';

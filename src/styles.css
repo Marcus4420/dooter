@@ -5,10 +5,10 @@
 
 @layer components {
   .message-sent {
-    @apply bg-amber-400
+    @apply bg-white text-black p-2 rounded-lg max-w-60 ml-auto m-4;
   }
   .message-received {
-    @apply bg-green-800
+    @apply bg-white text-black p-2 rounded-lg max-w-60 mr-auto m-4;
   }
 }
 

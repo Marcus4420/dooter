@@ -4,7 +4,7 @@
 
   <div class="absolute bottom-10 w-screen">
     <form class="flex justify-center p-5" [formGroup]="messageForm" (ngSubmit)="onSubmit()">
-      <input class="mx-5 rounded-md border-black border-2" formControlName="message" type="text">
+      <input class="mx-5 rounded-md border-black border-2" formControlName="message" type="text" maxlength="20">
       <button type="submit" class="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-full w-40">Send</button>
     </form>
   </div>

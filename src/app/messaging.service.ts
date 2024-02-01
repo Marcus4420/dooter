@@ -36,7 +36,7 @@ export class MessagingService {
     const { data, error } = await this._supabaseClient
         .from('messages')
         .insert([
-          { sender_id: this._currentProfileID(), receiver_id: this._currentProfileID(), message: message, sent_at: new Date() },
+          { sender_id: this._currentProfileID(), receiver_id: '2bf9356c-f685-4dca-bfb1-9966752d0149', message: message, sent_at: new Date() },
         ])
         .select()
     if (data) {
