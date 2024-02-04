@@ -1,6 +1,5 @@
 import {computed, effect, inject, Injectable, signal, WritableSignal} from '@angular/core';
 import {AuthService} from "./auth.service";
-import {data} from "autoprefixer";
 
 export interface Message {
   id: string
@@ -11,6 +10,13 @@ export interface Message {
   sent_at: Date
 }
 
+export interface Conversation {
+    id: string
+    user_1: string
+    user_2: string
+    started_at: Date
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,27 +24,30 @@ export class MessagingService {
   private _authService = inject(AuthService)
   private _supabaseClient = this._authService.supabaseClient;
   private _currentProfileID = computed(() => this._authService.currentProfile()?.id);
+  private _conversation: WritableSignal<Conversation|null> = signal(null);
   private _loadedMessages: WritableSignal<Message[] | null> = signal(null)
   constructor() {
+    this.loadConversationBetweenUsers();
     effect(() => {
       if (this._currentProfileID()) {
         console.warn("SUBSCRIBED", this._currentProfileID())
         this.subscribeToMessagesReceivedToSpecificUser();
-        this.loadMessagesBetweenUsers();
+        this.loadMessagesByConversationID();
       }
 
     })
     effect(() => {
       console.log("Messages: ", this._loadedMessages());
     })
+      effect(() => console.log("Conversation effect ", this._conversation()))
 
   }
 
-  async sendMessageToDB(message: string, receiverID: string) {
+  async SendMessageToUser(message: string, receiverID: string) {
     const { data, error } = await this._supabaseClient
         .from('messages')
         .insert([
-          { conversation_id: '50e6445d-18c1-4901-92de-4aef819c9179',sender_id: this._currentProfileID(), receiver_id: receiverID, message: message, sent_at: new Date() },
+          { conversation_id: this._conversation()?.id,sender_id: this._currentProfileID(), receiver_id: receiverID, message: message, sent_at: new Date() },
         ])
         .select()
     if (data) {
@@ -58,7 +67,7 @@ export class MessagingService {
                 //TODO FETCH LAST 30 MESSAGES WITH THIS COMBINED KEY
                 //TODO ADD CACHING OR SOMETHING SO WE DONT HAVE TO FETCH ALL THE TIME!
                 const { receiver_id, sender_id } = payload.new
-                this.loadMessagesBetweenUsers();
+                this.loadMessagesByConversationID();
                 console.log(receiver_id, sender_id);
                 console.log('Change received!', payload)
               }
@@ -66,8 +75,7 @@ export class MessagingService {
           .subscribe()
   }
 
-  async loadMessagesBetweenUsers() {
-    console.log("hit")
+  async loadMessagesByConversationID() {
     const { data: messages, error } = await this._supabaseClient
         .from('messages')
         .select('*').eq('conversation_id', '50e6445d-18c1-4901-92de-4aef819c9179')
@@ -82,10 +90,15 @@ export class MessagingService {
         .from('conversation')
         .select('*').eq('id','50e6445d-18c1-4901-92de-4aef819c9179')
         .single();
-    return '50e6445d-18c1-4901-92de-4aef819c9179';
+    this._conversation.set(conversation as Conversation)
   }
+
 
   get currentLoadedMessages() {
     return this._loadedMessages.asReadonly();
+  }
+
+  get currentConversationID() {
+    return this._conversation.asReadonly();
   }
 }

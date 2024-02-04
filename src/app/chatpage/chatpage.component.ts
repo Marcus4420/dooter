@@ -29,8 +29,8 @@ export class ChatpageComponent {
   //TODO add user experience when no message is input
   onSubmit() {
     if (this.messageForm.value.message) {
-      console.log("onSubmit",this.messageForm.value.message,'2bf9356c-f685-4dca-bfb1-9966752d0149');
-      this.messageService.sendMessageToDB(this.messageForm.value.message, '2bf9356c-f685-4dca-bfb1-9966752d0149');
+      console.log("onSubmit",this.messageForm.value.message,this.messageService.currentConversationID());
+      this.messageService.SendMessageToUser(this.messageForm.value.message, '2bf9356c-f685-4dca-bfb1-9966752d0149');
       this.messageForm.reset();
       return
     }
