@@ -24,7 +24,7 @@ export class MessagingService {
   private _authService = inject(AuthService)
   private _supabaseClient = this._authService.supabaseClient;
   private _currentProfileID = computed(() => this._authService.currentProfile()?.id);
-  private _conversation: WritableSignal<Conversation|null> = signal(null);
+  private _conversation: WritableSignal<Message[]|null> = signal(null);
   private _loadedMessages: WritableSignal<Message[] | null> = signal(null)
   constructor() {
     this.loadConversationBetweenUsers();
@@ -32,7 +32,7 @@ export class MessagingService {
       if (this._currentProfileID()) {
         console.warn("SUBSCRIBED", this._currentProfileID())
         this.subscribeToMessagesReceivedToSpecificUser();
-        this.loadMessagesByConversationID();
+        // this.loadMessagesByConversationID();
       }
 
     })
@@ -47,7 +47,7 @@ export class MessagingService {
     const { data, error } = await this._supabaseClient
         .from('messages')
         .insert([
-          { conversation_id: this._conversation()?.id,sender_id: this._currentProfileID(), receiver_id: receiverID, message: message, sent_at: new Date() },
+          { conversation_id: '50e6445d-18c1-4901-92de-4aef819c9179',sender_id: this._currentProfileID(), receiver_id: receiverID, message: message, sent_at: new Date() },
         ])
         .select()
     if (data) {
@@ -67,7 +67,7 @@ export class MessagingService {
                 //TODO FETCH LAST 30 MESSAGES WITH THIS COMBINED KEY
                 //TODO ADD CACHING OR SOMETHING SO WE DONT HAVE TO FETCH ALL THE TIME!
                 const { receiver_id, sender_id } = payload.new
-                this.loadMessagesByConversationID();
+                this.loadConversationBetweenUsers();
                 console.log(receiver_id, sender_id);
                 console.log('Change received!', payload)
               }
@@ -86,19 +86,21 @@ export class MessagingService {
 
   //TODO user sender and receiver from here
   async loadConversationBetweenUsers() {
-    const { data: conversation, error } = await this._supabaseClient
-        .from('conversation')
-        .select('*').eq('id','50e6445d-18c1-4901-92de-4aef819c9179')
-        .single();
-    this._conversation.set(conversation as Conversation)
+    const { data: messages, error } = await this._supabaseClient
+        .from('messages')
+        .select('*')
+        .eq('conversation_id','50e6445d-18c1-4901-92de-4aef819c9179')
+        .order('sent_at', {ascending: false})
+        .range(0,9);
+    this._conversation.set(messages)
   }
 
 
-  get currentLoadedMessages() {
-    return this._loadedMessages.asReadonly();
-  }
-
-  get currentConversationID() {
+  get currentLoadedConversation() {
     return this._conversation.asReadonly();
   }
+
+  // get currentConversationID() {
+  //   return this._conversation.asReadonly();
+  // }
 }

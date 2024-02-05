@@ -20,7 +20,7 @@ export class ChatpageComponent {
   private authService = inject(AuthService);
   private messageService = inject(MessagingService)
   private formbuilder = inject(FormBuilder);
-  public currentLoadedMessages = this.messageService.currentLoadedMessages;
+  public currentLoadedMessages = this.messageService.currentLoadedConversation;
   messageForm = this.formbuilder.group({
     message: '',
   });
@@ -29,7 +29,7 @@ export class ChatpageComponent {
   //TODO add user experience when no message is input
   onSubmit() {
     if (this.messageForm.value.message) {
-      console.log("onSubmit",this.messageForm.value.message,this.messageService.currentConversationID());
+      // console.log("onSubmit",this.messageForm.value.message,this.messageService.currentConversationID());
       this.messageService.SendMessageToUser(this.messageForm.value.message, '2bf9356c-f685-4dca-bfb1-9966752d0149');
       this.messageForm.reset();
       return
