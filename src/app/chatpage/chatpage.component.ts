@@ -21,16 +21,20 @@ export class ChatpageComponent {
   private messageService = inject(MessagingService)
   private formbuilder = inject(FormBuilder);
   public currentLoadedMessages = this.messageService.currentLoadedConversation;
+  public currentUser = this.authService.currentProfile;
+  public recievers = this.messageService.receivers;
   messageForm = this.formbuilder.group({
+    receiver: '',
     message: '',
   });
 
 
   //TODO add user experience when no message is input
   onSubmit() {
-    if (this.messageForm.value.message) {
+    if (this.messageForm.value.message && this.messageForm.value.receiver) {
       // console.log("onSubmit",this.messageForm.value.message,this.messageService.currentConversationID());
-      this.messageService.SendMessageToUser(this.messageForm.value.message, '2bf9356c-f685-4dca-bfb1-9966752d0149');
+      console.log(this.messageForm.value.receiver)
+      this.messageService.SendMessageToUser(this.messageForm.value.message, this.messageForm.value.receiver);
       this.messageForm.reset();
       return
     }

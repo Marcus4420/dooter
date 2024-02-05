@@ -33,16 +33,20 @@ To get a local copy up and running, follow these steps:
 - Create Profile page
 - More content on home page
 - Make loading animation on message submit
+- Friend selector navbar
 ### Logic
 - Get realtime connection to supabase
 - Allow for messages to be sent
 - Allow for users to select a receiver of messages
 - Make users searchable
+- Searchable data structure of friends
+- Searchable of all users
 ### Database
 - Setup RLS on messages
 - Normalize DB
 - Update schemas
 - take messages out with a FK to a table with sender and receiver
+- Friend relations
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
